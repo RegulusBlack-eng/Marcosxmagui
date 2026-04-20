@@ -127,4 +127,87 @@
 
         /* Checklist */
         .task { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.9rem; }
-        input[type="checkbox"] { width: 16px;
+        input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <p style="font-size: 0.8rem; color: var(--text-dim);">TERMINAL_READY</p>
+        <h1 style="font-size: 1.4rem;">CENTRAL_WORKSPACE</h1>
+    </div>
+    <div id="clock">00:00:00</div>
+</header>
+
+<main class="grid">
+    <div class="card">
+        <h2>Quick Search</h2>
+        <div class="search-box">
+            <input type="text" id="g-search" placeholder="Google Search...">
+            <button class="btn" onclick="search('g')">Go</button>
+        </div>
+        <div class="search-box">
+            <input type="text" id="y-search" placeholder="YouTube Search...">
+            <button class="btn" onclick="search('y')" style="background:#ef4444; color:white;">YT</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Todo List</h2>
+        <div class="task"><input type="checkbox"> <span>Finalizar UI Panadería</span></div>
+        <div class="task"><input type="checkbox"> <span>Módulo Cesar Electrónica</span></div>
+        <div class="task"><input type="checkbox"> <span>Estudiar para la UNGS</span></div>
+        <div class="task"><input type="checkbox"> <span>Backup de Hardware</span></div>
+    </div>
+
+    <div class="card">
+        <h2>Resources</h2>
+        <div class="links-grid">
+            <a href="https://github.com" target="_blank" class="link-item">GitHub</a>
+            <a href="https://bolt.new" target="_blank" class="link-item">Bolt.new</a>
+            <a href="https://lovable.dev" target="_blank" class="link-item">Lovable</a>
+            <a href="https://web.whatsapp.com" target="_blank" class="link-item">WhatsApp</a>
+        </div>
+    </div>
+
+    <div class="card" style="grid-column: span 1;">
+        <h2>Dev Notes (Auto-save)</h2>
+        <textarea id="dev-notes" placeholder="// Tus notas se guardan automáticamente en este navegador..."></textarea>
+    </div>
+</main>
+
+<script>
+    // Reloj
+    setInterval(() => {
+        document.getElementById('clock').textContent = new Date().toLocaleTimeString();
+    }, 1000);
+
+    // Buscador
+    function search(mode) {
+        const gInput = document.getElementById('g-search');
+        const yInput = document.getElementById('y-search');
+        
+        if (mode === 'g' && gInput.value) {
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(gInput.value)}`, '_blank');
+            gInput.value = "";
+        } else if (mode === 'y' && yInput.value) {
+            window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(yInput.value)}`, '_blank');
+            yInput.value = "";
+        }
+    }
+
+    // Enter listeners
+    document.getElementById('g-search').addEventListener('keypress', e => e.key === 'Enter' && search('g'));
+    document.getElementById('y-search').addEventListener('keypress', e => e.key === 'Enter' && search('y'));
+
+    // Notas con LocalStorage (Persistencia)
+    const notes = document.getElementById('dev-notes');
+    notes.value = localStorage.getItem('my_workspace_notes') || "";
+    notes.addEventListener('input', () => {
+        localStorage.setItem('my_workspace_notes', notes.value);
+    });
+</script>
+
+</body>
+</html>
